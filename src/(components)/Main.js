@@ -2,15 +2,15 @@
 import { useState } from "react";
 import LetterScatter from "./LetterScatter.js";
 
-function NumberInput({index, number, updateNumber}) {
+function NumberInput({ index, number, updateNumber }) {
     return (
-        <input type="number" value={number} onChange={e => updateNumber(index, e.target.value)} />
+        <input type="range" value={number} onChange={e => updateNumber(index, e.target.value)} min={0} max={500} />
     );
 }
 
 export default function Main() {
-    const [numbers, updateNumbers] = useState([]);
-
+    let [generatedScatter, updateGeneratedScatter] = useState(null);
+    const [numbers, updateNumbers] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     function updateNumber(index, newValue) {
         let temp;
         temp = numbers.slice(0, numbers.length);
@@ -20,10 +20,8 @@ export default function Main() {
 
     return (
         <>
-            {/* // <LetterScatter numbers={[18, 36, 220, 110, 100, 350, 500, 300, 200, 400, 450, 250]} word="laptop" color="#00b899" /> */}
+            {numbers.map((value, index) => <NumberInput number={numbers[index]} updateNumber={updateNumber} index={index} key={index} />)}
             <LetterScatter numbers={numbers} word="laptop" color="#00b899" />
-            <NumberInput number={numbers[0]} updateNumber={updateNumber} index={0} />
-            <h1>{numbers}</h1>
         </>
     );
 }

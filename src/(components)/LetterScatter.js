@@ -5,9 +5,10 @@ function Letter({ letter, pos }) {
         <span style={{
             display: "inlineBlock",
             position: "absolute",
-            left: pos[0],
-            top: pos[1],
-            fontSize: "3em"
+            left: pos[0] + "px",
+            top: pos[1] + "px",
+            fontSize: "3em",
+            fontWeight: "700"
         }}>{letter}</span>
     );
 }
@@ -21,7 +22,7 @@ export default function LetterScatter({ numbers, word, color }) {
             color: color
         }} className={montserrat.className}>
             {[...word].map((value, index) => {
-                return <Letter letter={value} pos={[numbers[index * 2 - 1], numbers[index * 2]]} key={index} />;
+                return <Letter letter={value} pos={[numbers[index * 2], numbers[index * 2 + 1]]} key={index} />;
             })}
         </div>
     );
