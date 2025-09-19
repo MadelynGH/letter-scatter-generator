@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react";
 import LetterScatter from "./LetterScatter.js";
+import { montserrat } from "@/app/layout.js";
 
 function NumberInput({ index, number, updateNumber }) {
     return (
@@ -8,9 +9,28 @@ function NumberInput({ index, number, updateNumber }) {
     );
 }
 
+function InputsAndScatter({ word, numbers, updateNumber }) {
+    function returnZeros(num) {
+        let zeros = [];
+        for (let i = 0; i < num; i++) {
+            zeros.push(0);
+        }
+        return zeros
+    }
+
+    return (
+        <>
+            {returnZeros(word.length * 2).map((value, index) => <NumberInput number={numbers[index]} updateNumber={updateNumber} index={index} key={index} />)}
+            <LetterScatter numbers={numbers} word={word} color="#00b899" />
+        </>
+    );
+}
+
 export default function Main() {
-    let [generatedScatter, updateGeneratedScatter] = useState(null);
     const [numbers, updateNumbers] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    const [word, updateWord] = useState("");
+    const [wordSubmitted, updateWordSubmitted] = useState(false);
+    
     function updateNumber(index, newValue) {
         let temp;
         temp = numbers.slice(0, numbers.length);
@@ -20,8 +40,11 @@ export default function Main() {
 
     return (
         <>
-            {numbers.map((value, index) => <NumberInput number={numbers[index]} updateNumber={updateNumber} index={index} key={index} />)}
-            <LetterScatter numbers={numbers} word="laptop" color="#00b899" />
+            {wordSubmitted ? <p>{word}</p> : <input type="text" value={word} onChange={e => updateWord(e.target.value)}  className={montserrat.className} />}
+            <button onClick={() => updateWordSubmitted(true)} className={montserrat.className} style={{
+                display: wordSubmitted ? "none" : "block"
+            }}>Use Word</button>
+            {wordSubmitted ? <InputsAndScatter word={word} numbers={numbers} updateNumber={updateNumber} /> : null}
         </>
     );
 }
