@@ -9,7 +9,16 @@ function NumberInput({ index, number, updateNumber }) {
     );
 }
 
-function InputsAndScatter({ word, numbers, updateNumber }) {
+function InputsAndScatter({ word }) {
+    const [numbers, updateNumbers] = useState(returnZeros(word.length));
+
+    function updateNumber(index, newValue) {
+        let temp;
+        temp = numbers.slice(0, numbers.length);
+        temp[index] = newValue;
+        updateNumbers(temp);
+    }
+
     function returnZeros(num) {
         let zeros = [];
         for (let i = 0; i < num; i++) {
@@ -20,23 +29,15 @@ function InputsAndScatter({ word, numbers, updateNumber }) {
 
     return (
         <>
-            {returnZeros(word.length * 2).map((value, index) => <NumberInput number={numbers[index]} updateNumber={updateNumber} index={index} key={index} />)}
+            {numbers.map((value, index) => <NumberInput number={numbers[index]} updateNumber={updateNumber} index={index} key={index} />)}
             <LetterScatter numbers={numbers} word={word} color="#00b899" />
         </>
     );
 }
 
 export default function Main() {
-    const [numbers, updateNumbers] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     const [word, updateWord] = useState("");
     const [wordSubmitted, updateWordSubmitted] = useState(false);
-    
-    function updateNumber(index, newValue) {
-        let temp;
-        temp = numbers.slice(0, numbers.length);
-        temp[index] = newValue;
-        updateNumbers(temp);
-    }
 
     return (
         <>
@@ -44,7 +45,7 @@ export default function Main() {
             <button onClick={() => updateWordSubmitted(true)} className={montserrat.className} style={{
                 display: wordSubmitted ? "none" : "block"
             }}>Use Word</button>
-            {wordSubmitted ? <InputsAndScatter word={word} numbers={numbers} updateNumber={updateNumber} /> : null}
+            {wordSubmitted ? <InputsAndScatter word={word} /> : null}
         </>
     );
 }
